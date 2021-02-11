@@ -54,12 +54,20 @@ defmodule Remote.Points do
     {:ok, default_state}
   end
 
+  defp frequency do
+    if Mix.env() == :test do
+      1_000
+    else
+      60_000
+    end
+  end
+
   defp schedule_work,
     do:
       Process.send_after(
         self(),
         :work,
-        60_000
+        frequency()
       )
 
   @impl true

@@ -16,7 +16,7 @@ defmodule Remote.PointsTest do
     test "validates user points are updated every minute" do
       %User{updated_at: prev_updated_at} = Users.list_user() |> List.last()
 
-      :timer.sleep(60_000)
+      :timer.sleep(1000)
 
       %User{updated_at: updated_at} = Users.get_user!(1)
       assert DateTime.compare(updated_at, prev_updated_at) == :gt
