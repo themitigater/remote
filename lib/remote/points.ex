@@ -81,7 +81,7 @@ defmodule Remote.Points do
       user |> Users.set_random_points()
     end)
 
-    updated_state = {Users.generate_number(),  timestamp}
+    updated_state = {Users.generate_number(), timestamp}
 
     # This ensures that there are never two parallel updates triggered
     schedule_work()
