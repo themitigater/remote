@@ -13,7 +13,7 @@ Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
 * PostgreSQL.
 
-## About the application:
+## About The Application
 
 * Starts a GenServer which:
   * Randomly sets points (0-100) for all the users in the database every minute
