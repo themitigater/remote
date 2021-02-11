@@ -6,9 +6,9 @@ defmodule Remote.Points do
     3. Exposes a public API to return the first 2 users with Points > max_number
     and stores the queried time in Process Memory.
 
-    Process State: %{
-      max_numberber: Integer.t()
-      timestamp: nil | DateTime.t()
+    Process State: {
+       Integer.t(),
+       nil | DateTime.t()
     }
 
   """
@@ -50,7 +50,7 @@ defmodule Remote.Points do
   def init(_) do
     schedule_work()
 
-    default_state = %{max_number: Users.generate_number(), timestamp: nil}
+    default_state = {Users.generate_number(), nil}
     {:ok, default_state}
   end
 
@@ -66,14 +66,14 @@ defmodule Remote.Points do
   @doc """
 
   """
-  def handle_info(:work, %{max_number: _max_number, timestamp: timestamp}) do
+  def handle_info(:work, {_, timestamp}) do
     # Can also use Task.async_stream() to parallelize updates across
     Users.list_user()
     |> Enum.each(fn user ->
       user |> Users.set_random_points()
     end)
 
-    updated_state = %{max_number: Users.generate_number(), timestamp: timestamp}
+    updated_state = {Users.generate_number(),  timestamp}
 
     # This ensures that there are never two parallel updates triggered
     schedule_work()
@@ -81,12 +81,12 @@ defmodule Remote.Points do
   end
 
   @impl true
-  def handle_call(:query, _from, %{max_number: max_number, timestamp: timestamp}) do
+  def handle_call(:query, _from, {max_number, timestamp}) do
     users = Users.first_two_users(max_number)
 
     data = %{users: users, timestamp: timestamp}
 
-    updated_state = %{max_number: max_number, timestamp: DateTime.utc_now()}
+    updated_state = {max_number, DateTime.utc_now()}
 
     {:reply, {:ok, data}, updated_state}
   end
