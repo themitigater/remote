@@ -15,6 +15,11 @@ defmodule Remote.Application do
       # {Phoenix.PubSub, name: Remote.PubSub},
       # Start the Endpoint (http/https)
       RemoteWeb.Endpoint,
+
+      # In case we want to run more than one instanc of the application
+      # then I would prefer using Swarn to create a Global Genserver.
+      # This will remove the requirement of maintaining Mutexes and
+      # still have the GenServer accessble from all pods.
       {Remote.Points, :points}
       # Start a worker by calling: Remote.Worker.start_link(arg)
       # {Remote.Worker, arg}
