@@ -8,7 +8,7 @@ defmodule Remote.Users.User do
   schema "users" do
     field :points, :integer
 
-    timestamps()
+    timestamps(type: :utc_datetime)
   end
 
   @doc false
